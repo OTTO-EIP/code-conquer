@@ -29,4 +29,7 @@ RUN make PLATFORM=PLATFORM_DESKTOP RAYLIB_LIBTYPE=SHARED
 RUN make PLATFORM=PLATFORM_WEB
 RUN make install
 
-CMD [ "make re" ]
+WORKDIR /
+COPY . /
+RUN gcc main.c -o main -lraylib -lm
+CMD [ "./main" ]
