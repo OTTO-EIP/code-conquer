@@ -8,6 +8,7 @@ class Raylib {
     public:
         Raylib();
         ~Raylib();
+        void testLandingPage();
 
     private:
         void initWindow();

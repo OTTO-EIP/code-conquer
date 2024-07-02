@@ -1,7 +1,7 @@
 FROM ubuntu:22.04
 
 USER root
-WORKDIR /
+WORKDIR /app
 
 # Install basics dependencies
 RUN apt-get update
@@ -14,22 +14,24 @@ RUN apt install python3 -y
 
 # Install emcc - emscripten
 RUN git clone https://github.com/emscripten-core/emsdk.git
-WORKDIR /emsdk/
+WORKDIR /app/emsdk/
 RUN git pull
 RUN ./emsdk install latest
 RUN ./emsdk activate latest
-WORKDIR /
-ENV EMSCRIPTEN=/emsdk/upstream/emscripten
+WORKDIR /app
+ENV EMSCRIPTEN=/app/emsdk/upstream/emscripten
 ENV PATH=$PATH:$EMSCRIPTEN
 
 # Install Raylib
-WORKDIR /raylib/src/
+WORKDIR /app/raylib/src/
 RUN make PLATFORM=PLATFORM_DESKTOP
 RUN make PLATFORM=PLATFORM_DESKTOP RAYLIB_LIBTYPE=SHARED
 RUN make PLATFORM=PLATFORM_WEB
 RUN make install
 
-WORKDIR /
-COPY . /
-RUN gcc main.c -o main -lraylib -lm
-CMD [ "./main" ]
+WORKDIR /app
+COPY . /app
+RUN emcc main.cpp -o index.html -I./raylib/src -L./raylib/src -lraylib -s USE_GLFW=3 -s ASYNCIFY -DPLATFORM_WEB
+EXPOSE 8080
+
+CMD ["emrun", "--no_browser", "--port", "8080", "."]
