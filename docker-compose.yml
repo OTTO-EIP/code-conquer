@@ -1,0 +1,10 @@
+services:
+  game:
+    build:
+      dockerfile: Dockerfile
+      context: ./game/
+
+  # web:
+  #   build:
+  #     dockerfile: Dockerfile
+  #     context: ./web/
