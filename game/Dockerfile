@@ -1,6 +1,5 @@
 FROM ubuntu:22.04
 
-USER root
 WORKDIR /app
 
 # Install basic dependencies
@@ -26,10 +25,12 @@ WORKDIR /app/raylib/src
 RUN /bin/bash -c "source /app/emsdk/emsdk_env.sh && make clean && make PLATFORM=PLATFORM_WEB RAYLIB_LIBTYPE=STATIC"
 
 # Copy application code and compile with Emscripten
-WORKDIR /app
 COPY . /app
-RUN /bin/bash -c "source /app/emsdk/emsdk_env.sh && emcc main.cpp -o index.html -I /app/raylib/src -L /app/raylib/src -lraylib -s USE_GLFW=3 -s ASYNCIFY -DPLATFORM_WEB"
+WORKDIR /app
+COPY ./assets /app/assets
+# RUN /bin/bash -c "source /app/emsdk/emsdk_env.sh"
+RUN /bin/bash -c "source /app/emsdk/emsdk_env.sh && emcc main.cpp raylib/raylib.cpp src/RayCam/RayCam.cpp -o index.html -I /app/raylib/src -L /app/raylib/src -lraylib -s USE_GLFW=3 -s ASYNCIFY -DPLATFORM_WEB"
 
 # Expose port and start the web server
-EXPOSE 8080
+# CMD ["emcc", "main.cpp", "raylib/raylib.cpp", "src/RayCam/RayCam.cpp", "-o", "index.html", "-I", "/app/raylib/src", "-L", "/app/raylib/src", "-lraylib", "-s", "USE_GLFW=3", "-s", "ASYNCIFY", "-DPLATFORM_WEB"]
 CMD ["emrun", "--no_browser", "--port", "8080", "."]

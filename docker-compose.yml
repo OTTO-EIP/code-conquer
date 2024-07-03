@@ -3,6 +3,7 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./game/
+    # command: ["emrun", "--no_browser", "--port", "8080", "."]
     ports:
       - "8080:8080"
 
