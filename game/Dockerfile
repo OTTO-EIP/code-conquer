@@ -25,9 +25,8 @@ WORKDIR /app/raylib/src
 RUN /bin/bash -c "source /app/emsdk/emsdk_env.sh && make clean && make PLATFORM=PLATFORM_WEB RAYLIB_LIBTYPE=STATIC"
 
 # Copy application code and compile with Emscripten
-COPY . /app
 WORKDIR /app
-COPY ./assets /app/assets
+COPY . /app
 # RUN /bin/bash -c "source /app/emsdk/emsdk_env.sh"
 RUN /bin/bash -c "source /app/emsdk/emsdk_env.sh && emcc main.cpp raylib/raylib.cpp src/RayCam/RayCam.cpp -o index.html -I /app/raylib/src -L /app/raylib/src -lraylib -s USE_GLFW=3 -s ASYNCIFY -DPLATFORM_WEB"
 
