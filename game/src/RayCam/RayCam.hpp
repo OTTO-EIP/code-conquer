@@ -10,7 +10,7 @@ class RayCam
         RenderTexture getScreenCamera();
         Camera2D getCamera();
 
-    private:
         Camera2D _camera;
+    private:
         RenderTexture _screenCamera;
 };
