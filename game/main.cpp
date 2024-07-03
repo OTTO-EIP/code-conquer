@@ -3,11 +3,9 @@
 int main(int ac, char **av)
 {
     Raylib raylib;
-    std::srand(std::time(nullptr));
-
     while (!WindowShouldClose()) {
         raylib.testLandingPage();
     }
-    CloseWindow();
+    CloseWindow(); 
     return 0;
 }
