@@ -1,6 +1,5 @@
 FROM ubuntu:22.04
 
-USER root
 WORKDIR /app
 
 # Install basic dependencies
@@ -29,7 +28,7 @@ RUN /bin/bash -c "source /app/emsdk/emsdk_env.sh && make clean && make PLATFORM=
 WORKDIR /app
 COPY . /app
 RUN /bin/bash -c "source /app/emsdk/emsdk_env.sh && emcc main.cpp -o index.html -I /app/raylib/src -L /app/raylib/src -lraylib -s USE_GLFW=3 -s ASYNCIFY -DPLATFORM_WEB"
-
 # Expose port and start the web server
 EXPOSE 8080
+
 CMD ["emrun", "--no_browser", "--port", "8080", "."]
