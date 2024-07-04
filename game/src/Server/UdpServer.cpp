@@ -26,38 +26,61 @@ UdpServer::UdpServer(int port) : port(port), running(true) {
 UdpServer::~UdpServer() {
     running = false;
     close(sockfd);
-    for (auto &thread : clientThreads) {
-        if (thread.joinable()) {
-            thread.join();
-        }
+    if (clientThread.joinable()) {
+        clientThread.join();
     }
 }
 
-void UdpServer::handleClient(int clientSock, struct sockaddr_in cliaddr) {
+void UdpServer::handleClient() {
     char buffer[BUFFER_SIZE];
+    struct sockaddr_in cliaddr;
     int len = sizeof(cliaddr);
+
     while (running) {
-        int n = recvfrom(clientSock, (char *)buffer, BUFFER_SIZE, MSG_WAITALL, (struct sockaddr *)&cliaddr, (socklen_t *)&len);
+        int n = recvfrom(sockfd, (char *)buffer, BUFFER_SIZE, MSG_WAITALL, (struct sockaddr *)&cliaddr, (socklen_t *)&len);
         if (n > 0) {
             buffer[n] = '\0';
             printf("Client: %s\n", buffer);
-            sendto(clientSock, (const char *)"Hello from server", strlen("Hello from server"), MSG_CONFIRM, (const struct sockaddr *)&cliaddr, len);
-            printf("Hello message sent.\n");
+
+            // Add the client to the list of clients
+            {
+                std::lock_guard<std::mutex> lock(clientsMutex);
+                clients.insert(cliaddr);
+            }
+
+            // Broadcast the message to all clients
+            broadcastMessage(buffer, n, cliaddr);
         }
     }
 }
 
-void UdpServer::start() {
-    while (running) {
-        struct sockaddr_in cliaddr;
-        memset(&cliaddr, 0, sizeof(cliaddr));
-        handleClient(sockfd, cliaddr);
+
+
+void UdpServer::broadcastMessage(const char* message, int length, struct sockaddr_in senderAddr) {
+    std::lock_guard<std::mutex> lock(clientsMutex);
+
+    for (const auto& client : clients) {
+        if (client.sin_addr.s_addr != senderAddr.sin_addr.s_addr || client.sin_port != senderAddr.sin_port) {
+            sendto(sockfd, message, length, MSG_CONFIRM, (const struct sockaddr *)&client, sizeof(client));
+        }
     }
+    printf("Message broadcasted.\n");
 }
 
-int main(int ac, char** av) {
-    if (ac < 1)
-        return 84;
-    UdpServer *_server = new UdpServer(std::stoi(av[1]));
-    _server->start();
+void UdpServer::start() {
+    clientThread = std::thread(&UdpServer::handleClient, this);
+    clientThread.join();
+}
+
+int main(int argc, char** argv) {
+    if (argc < 2) {
+        std::cerr << "Usage: " << argv[0] << " <port>" << std::endl;
+        return 1;
+    }
+
+    int port = std::stoi(argv[1]);
+    UdpServer server(port);
+    server.start();
+
+    return 0;
 }

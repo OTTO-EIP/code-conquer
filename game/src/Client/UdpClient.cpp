@@ -28,26 +28,51 @@ UdpClient::~UdpClient() {
 }
 
 void UdpClient::sendMessages() {
+    std::string greeting = "Hello";
+    sendto(sockfd, greeting.c_str(), greeting.size(), MSG_CONFIRM, (const struct sockaddr *)&servaddr, sizeof(servaddr));
     std::string message;
     while (running) {
         std::getline(std::cin, message);
         if (message == "quit") {
             running = false;
-            break;
+
+            exit(0);
         }
         sendto(sockfd, message.c_str(), message.size(), MSG_CONFIRM, (const struct sockaddr *)&servaddr, sizeof(servaddr));
-        printf("Message sent: %s\n", message.c_str());
+        std::cout << "Message sent: " << message << std::endl;
     }
 }
 
 void UdpClient::receiveMessages() {
     char buffer[BUFFER_SIZE];
     int len = sizeof(servaddr);
+
     while (running) {
         int n = recvfrom(sockfd, (char *)buffer, BUFFER_SIZE, MSG_WAITALL, (struct sockaddr *)&servaddr, (socklen_t *)&len);
         if (n > 0) {
             buffer[n] = '\0';
             printf("Server: %s\n", buffer);
+
+            switch (std::stoi(buffer)) {
+                case 0:
+                    _caracter->_scarfy = &_caracter->_scarfyURight;
+                    break;
+                case 1:
+                    _caracter->_scarfy = &_caracter->_scarfyDRight;
+                    break;
+                case 2:
+                    _caracter->_scarfy = &_caracter->_scarfyDLeft;
+                    break;
+                case 3:
+                    _caracter->_scarfy = &_caracter->_scarfyULeft;
+                    break;
+            }
+
+            for (int i = 0; i < 48; i++) {
+                _caracter->updateAnimation(18, 12, std::stoi(buffer));
+                _caracter->mouvement();
+                std::this_thread::sleep_for(std::chrono::milliseconds(30));
+            }
         }
     }
 }
@@ -55,13 +80,78 @@ void UdpClient::receiveMessages() {
 void UdpClient::start() {
     sendThread = std::thread(&UdpClient::sendMessages, this);
     receiveThread = std::thread(&UdpClient::receiveMessages, this);
+
+}
+
+void UdpClient::join() {
     sendThread.join();
     receiveThread.join();
 }
 
-int main(int ac, char** av) {
-    if (ac < 1)
-        return 84;
-    UdpClient *_client = new UdpClient(av[1], std::stoi(av[2]));
-    _client->start();
+
+void runGameLoop(UdpClient *client) {
+    Raylib raylib;
+    Rectangle scene = { 0, 0, 600, 600 };
+    RayCam camera(raylib.getWindowSize(), scene);
+    Rectangle ScreenRect = { 0.0f, 0.0f, (float)camera.getScreenCamera().texture.width, (float)-camera.getScreenCamera().texture.height };
+    Map map;
+    Entity ground_template("../../assets/map/Tiles/grass_center_E.png", {0, 0});
+    client->_caracter = new Character("../../assets/Player/fox1.png", 12);
+    map.generateGround(ground_template, raylib);
+
+
+    SetTargetFPS(60);
+
+    while (!WindowShouldClose()) {
+
+
+        if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT) || IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+            Vector2 mouseDelta = GetMouseDelta();
+            camera._camera.target.x -= mouseDelta.x;
+            camera._camera.target.y -= mouseDelta.y;
+        }
+        BeginTextureMode(camera.getScreenCamera());
+            ClearBackground(RAYWHITE);
+
+            BeginMode2D(camera.getCamera());
+                map.draw();
+                DrawTextureRec(*client->_caracter->_scarfy, client->_caracter->_frameRec, client->_caracter->_position, WHITE);
+            EndMode2D();
+
+        EndTextureMode();
+
+        BeginDrawing();
+            ClearBackground(BLACK);
+            DrawTextureRec(camera.getScreenCamera().texture, ScreenRect, (Vector2){ 0, 0 }, WHITE);
+        EndDrawing();
+    }
+
+    CloseWindow();
+    // delete client_caracter;
+}
+
+int main(int argc, char** argv) {
+    if (argc < 2) {
+        std::cerr << "Usage: " << argv[0] << " <port>" << std::endl;
+        return 1;
+    }
+
+    int port = std::stoi(argv[1]);
+    std::string serverAddress = "127.0.0.1";
+
+
+    UdpClient client(serverAddress, port);
+
+    client.start();
+
+    if (argc > 2)
+        client.gameThread = std::thread(runGameLoop, &client);
+
+    client.join();
+
+    if (argc > 2)
+        client.gameThread.join();
+
+
+    return 0;
 }

@@ -7,17 +7,17 @@
 class Character {
     public:
         Character(std::string texturePath, int frameNumber) {
-            _scarfyDLeft = LoadTexture("assets/Player/fox4.png");
-            _scarfyDRight = LoadTexture("assets/Player/fox1.png");
-            _scarfyULeft = LoadTexture("assets/Player/fox3.png");
-            _scarfyURight = LoadTexture("assets/Player/fox2.png");
+            _scarfyDLeft = LoadTexture("../../assets/Player/fox4.png");
+            _scarfyDRight = LoadTexture("../../assets/Player/fox1.png");
+            _scarfyULeft = LoadTexture("../../assets/Player/fox3.png");
+            _scarfyURight = LoadTexture("../../assets/Player/fox2.png");
 
             _direction = 1;
             _scarfy = &_scarfyDRight;
 
             _frameRec = { 0.0f, 0.0f, (float)_scarfy->width / 12, (float)_scarfy->height };
-            _position = { (float)(1920 / 2) - (float)(_scarfy->width / frameNumber / 2),
-                          (float)(1080 / 2) - (float)(_scarfy->height / 2) };
+            _position = { (float)(600 / 2) - (float)(_scarfy->width / frameNumber / 2),
+                          (float)(600 / 2) - (float)(_scarfy->height / 2) };
             _framesSpeed = 18;
 
         };

@@ -11,6 +11,9 @@
 #include <unistd.h>
 #include <thread>
 #include <atomic>
+#include "../Map/Map.hpp"
+#include "../RayCam/RayCam.hpp"
+#include "../Character/Character.hpp"
 
 #define BUFFER_SIZE 1024
 
@@ -19,6 +22,11 @@ public:
     UdpClient(const std::string &serverAddress, int port);
     ~UdpClient();
     void start();
+    void join();
+
+    Character *_caracter;
+    std::thread gameThread;
+
 
 private:
     void sendMessages();
@@ -30,6 +38,7 @@ private:
     std::atomic<bool> running;
     std::thread sendThread;
     std::thread receiveThread;
+
 };
 
 #endif // UDPCLIENT_H
