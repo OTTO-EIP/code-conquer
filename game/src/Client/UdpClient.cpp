@@ -141,16 +141,10 @@ int main(int argc, char** argv) {
 
 
     UdpClient client(serverAddress, port);
-
     client.start();
-
-    if (argc > 2)
-        client.gameThread = std::thread(runGameLoop, &client);
-
+    client.gameThread = std::thread(runGameLoop, &client);
     client.join();
-
-    if (argc > 2)
-        client.gameThread.join();
+    client.gameThread.join();
 
 
     return 0;
