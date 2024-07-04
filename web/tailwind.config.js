@@ -11,6 +11,7 @@ export default {
       },
       colors: {
         'green': '#27c906',
+        'light-grey': 'rgba(0,0,0,0.1)',
         'back': '#132D46'
       }
     },

@@ -4,7 +4,8 @@ import CharacterIcon from '@mui/icons-material/PeopleOutline';
 import ScriptIcon from '@mui/icons-material/ImportContacts';
 import LocalIcon from '@mui/icons-material/LocalGroceryStore';
 import * as monaco from 'monaco-editor';
-import FileExplorer from '../components/FileExplorer'; // Make sure to have the correct path
+import FileExplorer from '../components/FileExplorer';
+import CharacterDisplay from "../components/CharacterDisplay.tsx"; // Make sure to have the correct path
 
 const Dashboard: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState('code');
@@ -16,7 +17,7 @@ const Dashboard: React.FC = () => {
       case 'code':
         return <div id="editor-container" className="h-full w-full opacity-100"></div>;
       case 'character':
-        return <div>Character Content</div>;
+        return <CharacterDisplay />;
       case 'script':
         return <FileExplorer />;
       case 'local':
@@ -70,7 +71,7 @@ const Dashboard: React.FC = () => {
       }
       loaderScript.remove();
     };
-  }, []);
+  });
 
   useEffect(() => {
     if (selectedTab === 'code') {
@@ -97,7 +98,7 @@ const Dashboard: React.FC = () => {
         editorRef.current = null;
       }
     }
-  }, [selectedTab]);
+  }, [editorContent, selectedTab]);
 
   return (
       <div className="flex flex-col w-full h-full pt-20 space-y-6">

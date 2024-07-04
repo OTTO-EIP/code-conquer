@@ -1,5 +1,10 @@
-import React, { useState, useRef } from 'react';
-import { Menu, MenuItem, TextField } from '@mui/material';
+import React, { useState, useRef, useEffect } from 'react';
+import { Menu, MenuItem, TextField, Grid, IconButton, Breadcrumbs, Link } from '@mui/material';
+import FolderIcon from '@mui/icons-material/Folder';
+import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
+import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 
 type FileType = 'file' | 'folder';
 
@@ -15,10 +20,16 @@ const FileExplorer: React.FC = () => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [contextMenuFile, setContextMenuFile] = useState<File | null>(null);
     const [editingFile, setEditingFile] = useState<File | null>(null);
-    const [newName, setNewName] = useState('');
+    let [newName, setNewName] = useState('');
     const inputRef = useRef<HTMLInputElement>(null);
 
     const [mousePosition, setMousePosition] = useState<{ mouseX: number, mouseY: number }>({ mouseX: 0, mouseY: 0 });
+
+    useEffect(() => {
+        if (editingFile && inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, [editingFile]);
 
     const handleContextMenu = (event: React.MouseEvent, file: File | null) => {
         event.preventDefault();
@@ -35,9 +46,20 @@ const FileExplorer: React.FC = () => {
         setContextMenuFile(null);
     };
 
+    const generateUniqueName = (baseName: string, files: File[]): string => {
+        let newName = baseName;
+        let counter = 1;
+        const fileNames = files.map(file => file.name);
+        while (fileNames.includes(newName)) {
+            newName = `${baseName} (${counter})`;
+            counter++;
+        }
+        return newName;
+    };
+
     const handleAddFile = (isFolder: boolean) => {
         const newFile: File = {
-            name: '',
+            name: generateUniqueName('New', structure),
             type: isFolder ? 'folder' : 'file',
             children: isFolder ? [] : undefined,
         };
@@ -80,18 +102,6 @@ const FileExplorer: React.FC = () => {
         });
     };
 
-    const handleRename = () => {
-        if (contextMenuFile) {
-            console.log('Renaming file:', contextMenuFile.name);
-            setEditingFile(contextMenuFile); // Set the file to be edited
-            setNewName(contextMenuFile.name);
-            setTimeout(() => {
-                inputRef.current?.focus();
-            }, 0);
-        }
-        handleClose();
-    };
-
     const handleRenameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewName(e.target.value);
     };
@@ -100,8 +110,7 @@ const FileExplorer: React.FC = () => {
         if (editingFile) {
             console.log('editing file:', editingFile.name);
             if (newName.trim() === '') {
-                setEditingFile(null);
-                return;
+                newName = generateUniqueName('New', structure)
             }
             const updatedStructure = renameFileOrFolder(structure, editingFile, newName);
             setStructure(updatedStructure);
@@ -125,6 +134,10 @@ const FileExplorer: React.FC = () => {
         setCurrentPath([...currentPath, folder]);
     };
 
+    const handleNavigateTo = (index: number) => {
+        setCurrentPath(currentPath.slice(0, index + 1));
+    };
+
     const handleBack = () => {
         const updatedPath = [...currentPath];
         updatedPath.pop();
@@ -132,33 +145,44 @@ const FileExplorer: React.FC = () => {
     };
 
     const renderFiles = (files: File[]) => {
-        return files.map(file => (
-            <div
-                key={file.name || 'new-file'}
-                onContextMenu={(event) => handleContextMenu(event, file)} // Attach the context menu event
-                onDoubleClick={() => file.type === 'folder' && handleNavigate(file)}
-                className="cursor-pointer p-2"
-            >
-                {editingFile === file ? (
-                    <TextField
-                        value={newName}
-                        onChange={handleRenameChange}
-                        onBlur={handleRenameSubmit}
-                        onKeyPress={(e) => {
-                            if (e.key === 'Enter') {
-                                handleRenameSubmit();
-                            }
-                        }}
-                        inputRef={inputRef}
-                        size="small"
-                        variant="outlined"
-                        autoFocus
-                    />
-                ) : (
-                    file.name || 'New File/Folder'
-                )}
-            </div>
-        ));
+        return (
+            <Grid container spacing={2}>
+                {files.map(file => (
+                    <Grid item key={file.name || 'new-file'}>
+                        <div
+                            onContextMenu={(event) => handleContextMenu(event, file)}
+                            onDoubleClick={() => file.type === 'folder' && handleNavigate(file)}
+                            className="cursor-pointer max-w-[100px] truncate flex flex-col items-center"
+                        >
+                            <IconButton>
+                                {file.type === 'folder' ? <FolderIcon fontSize="large" /> : <InsertDriveFileIcon fontSize="large" />}
+                            </IconButton>
+                            <div className="truncate" style={{ marginTop: '8px', maxWidth: '100px' }}>
+                                {editingFile === file ? (
+                                    <TextField
+                                        value={newName}
+                                        onChange={handleRenameChange}
+                                        onBlur={handleRenameSubmit}
+                                        onKeyPress={(e) => {
+                                            if (e.key === 'Enter') {
+                                                handleRenameSubmit();
+                                            }
+                                        }}
+                                        inputRef={inputRef}
+                                        size="small"
+                                        variant="outlined"
+                                        autoFocus
+                                        style={{ maxWidth: '90px' }}
+                                    />
+                                ) : (
+                                    <span className="truncate">{file.name || 'New File/Folder'}</span>
+                                )}
+                            </div>
+                        </div>
+                    </Grid>
+                ))}
+            </Grid>
+        );
     };
 
     let currentFiles = structure;
@@ -171,27 +195,46 @@ const FileExplorer: React.FC = () => {
 
     return (
         <div className="p-4" onContextMenu={(event) => handleContextMenu(event, null)}>
+            <div className="mb-4 flex space-x-4 justify-end">
+                <IconButton onClick={handleBack} disabled={currentPath.length === 0}>
+                    <ArrowBackIcon/>
+                </IconButton>
+                <IconButton onClick={() => handleAddFile(false)}>
+                    <NoteAddIcon/>
+                </IconButton>
+                <IconButton onClick={() => handleAddFile(true)}>
+                    <CreateNewFolderIcon/>
+                </IconButton>
+            </div>
             <div className="mb-4">
-                <button onClick={handleBack} disabled={currentPath.length === 0}>
-                    Back
-                </button>
-                <button onClick={() => handleAddFile(false)} className="ml-4">
-                    New File
-                </button>
-                <button onClick={() => handleAddFile(true)} className="ml-4">
-                    New Folder
-                </button>
+                <Breadcrumbs aria-label="breadcrumb">
+                    <Link color="inherit" onClick={() => setCurrentPath([])} style={{cursor: 'pointer'}}>
+                        Home
+                    </Link>
+                    {currentPath.map((folder, index) => (
+                        <Link
+                            color="inherit"
+                            onClick={() => handleNavigateTo(index)}
+                            style={{cursor: 'pointer'}}
+                            key={folder.name}
+                        >
+                            {folder.name}
+                        </Link>
+                    ))}
+                </Breadcrumbs>
             </div>
             <div className="border p-4">
                 {currentFiles.length > 0 ? renderFiles(currentFiles) : <div>No files or folders</div>}
             </div>
             <Menu
                 anchorReference="anchorPosition"
-                anchorPosition={mousePosition.mouseY !== 0 ? { top: mousePosition.mouseY, left: mousePosition.mouseX } : undefined}
+                anchorPosition={mousePosition.mouseY !== 0 ? {
+                    top: mousePosition.mouseY,
+                    left: mousePosition.mouseX
+                } : undefined}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <MenuItem onClick={handleRename} disabled={!contextMenuFile}>Rename</MenuItem>
                 <MenuItem onClick={handleDelete} disabled={!contextMenuFile}>Delete</MenuItem>
             </Menu>
         </div>
