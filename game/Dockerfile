@@ -27,9 +27,8 @@ RUN /bin/bash -c "source /app/emsdk/emsdk_env.sh && make clean && make PLATFORM=
 # Copy application code and compile with Emscripten
 WORKDIR /app
 COPY . /app
-# RUN /bin/bash -c "source /app/emsdk/emsdk_env.sh"
-RUN /bin/bash -c "source /app/emsdk/emsdk_env.sh && emcc main.cpp raylib/raylib.cpp src/RayCam/RayCam.cpp -o index.html -I /app/raylib/src -L /app/raylib/src -lraylib -s USE_GLFW=3 -s ASYNCIFY -DPLATFORM_WEB"
-
+RUN /bin/bash -c "source /app/emsdk/emsdk_env.sh && emcc main.cpp raylib.cpp --shell-file custom_template.html -o index.html --preload-file res -I /app/raylib/src -L /app/raylib/src -lraylib -s USE_GLFW=3 -s ASYNCIFY -DPLATFORM_WEB"
 # Expose port and start the web server
-# CMD ["emcc", "main.cpp", "raylib/raylib.cpp", "src/RayCam/RayCam.cpp", "-o", "index.html", "-I", "/app/raylib/src", "-L", "/app/raylib/src", "-lraylib", "-s", "USE_GLFW=3", "-s", "ASYNCIFY", "-DPLATFORM_WEB"]
+EXPOSE 8080
+
 CMD ["emrun", "--no_browser", "--port", "8080", "."]
