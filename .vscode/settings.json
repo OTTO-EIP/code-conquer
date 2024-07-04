@@ -5,6 +5,7 @@
         "bit": "cpp",
         "*.tcc": "cpp",
         "cctype": "cpp",
+        "chrono": "cpp",
         "clocale": "cpp",
         "cmath": "cpp",
         "codecvt": "cpp",
@@ -29,7 +30,6 @@
         "memory": "cpp",
         "memory_resource": "cpp",
         "numeric": "cpp",
-        "optional": "cpp",
         "random": "cpp",
         "ratio": "cpp",
         "string_view": "cpp",
@@ -49,7 +49,6 @@
         "sstream": "cpp",
         "stdexcept": "cpp",
         "streambuf": "cpp",
-        "cinttypes": "cpp",
         "typeinfo": "cpp"
     }
 }
