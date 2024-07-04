@@ -7,6 +7,7 @@ class Interface {
 public:
     Interface(RayCam *camera_tmp) : iconLoaded(false) {
         iconHouseSelected = false;
+        buildMenuOpen = false;
         camera = camera_tmp;
         loadAllTexture();
 
@@ -62,7 +63,7 @@ void placeHouse() {
         float yy = (GetMousePosition().y - planHouse.height/5) + camera->getCamera().target.y;
         auto px = std::to_string(GetMousePosition().x);
         auto py = std::to_string(GetMousePosition().y);
-        DrawTextureEx(planHouse, {GetMousePosition().x- planHouse.width/5, GetMousePosition().y - planHouse.height/5}, 0, 0.3, WHITE); // Dessiner l'icône à une position donnée
+        DrawTextureEx(planHouse, {GetMousePosition().x- planHouse.width/5, GetMousePosition().y - planHouse.height/5}, 0, 0.5, WHITE); // Dessiner l'icône à une position donnée
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
             Texture2D new_house = LoadTexture("/assets/map/Interface/rem_0014.png");
             houses.push_back(new_house);
@@ -77,7 +78,7 @@ void placeHouse() {
 
 void drawAllHouses() {
     for (int i = 0; i != houses.size(); i++) {
-        DrawTextureEx(houses[i], houses_pos[i], 0, 0.3, WHITE);
+        DrawTextureEx(houses[i], houses_pos[i], 0, 0.5, WHITE);
     }
 }
 
