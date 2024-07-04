@@ -3,6 +3,7 @@
 #include "src/Character/Character.hpp"
 #include <filesystem>
 #include <vector>
+#include "Interface.hpp"
 
 #define PLAYER_SIZE 40
 
@@ -16,7 +17,8 @@ int main(int ac, char **av)
     Entity ground_template("assets/map/Tiles/grass_center_E.png", {0, 0});
     map.generateGround(ground_template, raylib);
     Character *_caracter = new Character("fox1.png", 12);
-    
+    Interface *_interface = new Interface();
+
 
     SetTargetFPS(60);
 
@@ -63,8 +65,9 @@ int main(int ac, char **av)
         EndTextureMode();
 
         BeginDrawing();
-            ClearBackground(BLACK);  
+            ClearBackground(BLACK);
             DrawTextureRec(camera.getScreenCamera().texture, ScreenRect, (Vector2){ 0, 0 }, WHITE);
+            _interface->drawInterface();
         EndDrawing();
     }
     
