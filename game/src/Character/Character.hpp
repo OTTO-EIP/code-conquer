@@ -7,10 +7,10 @@
 class Character {
     public:
         Character(std::string texturePath, int frameNumber) {
-            _scarfyDLeft = LoadTexture("res/fox4.png");
-            _scarfyDRight = LoadTexture("res/fox1.png");
-            _scarfyULeft = LoadTexture("res/fox3.png");
-            _scarfyURight = LoadTexture("res/fox2.png");
+            _scarfyDLeft = LoadTexture("assets/Player/fox4.png");
+            _scarfyDRight = LoadTexture("assets/Player/fox1.png");
+            _scarfyULeft = LoadTexture("assets/Player/fox3.png");
+            _scarfyURight = LoadTexture("assets/Player/fox2.png");
 
             _direction = 1;
             _scarfy = &_scarfyDRight;
