@@ -29,7 +29,7 @@ UdpClient::~UdpClient() {
 
 void UdpClient::sendMessages() {
     std::string greeting = "Hello";
-    sendto(sockfd, greeting.c_str(), greeting.size(), MSG_CONFIRM, (const struct sockaddr *)&servaddr, sizeof(servaddr));
+    sendto(sockfd, greeting.c_str(), greeting.size(), 0, (const struct sockaddr *)&servaddr, sizeof(servaddr));
     std::string message;
     while (running) {
         std::getline(std::cin, message);
@@ -38,7 +38,7 @@ void UdpClient::sendMessages() {
 
             exit(0);
         }
-        sendto(sockfd, message.c_str(), message.size(), MSG_CONFIRM, (const struct sockaddr *)&servaddr, sizeof(servaddr));
+        sendto(sockfd, message.c_str(), message.size(), 0, (const struct sockaddr *)&servaddr, sizeof(servaddr));
         std::cout << "Message sent: " << message << std::endl;
     }
 }
@@ -91,7 +91,7 @@ void UdpClient::join() {
 
 void runGameLoop(UdpClient *client) {
     Raylib raylib;
-    Rectangle scene = { 0, 0, 600, 600 };
+    Rectangle scene = { 0, 0, 1920, 1080 };
     RayCam camera(raylib.getWindowSize(), scene);
     Rectangle ScreenRect = { 0.0f, 0.0f, (float)camera.getScreenCamera().texture.width, (float)-camera.getScreenCamera().texture.height };
     Map map;
@@ -99,30 +99,55 @@ void runGameLoop(UdpClient *client) {
     client->_caracter = new Character("../../assets/Player/fox1.png", 12);
     map.generateGround(ground_template, raylib);
 
-
     SetTargetFPS(60);
+
+
+     bool inventoryShow = false;
 
     while (!WindowShouldClose()) {
 
-
+        Vector2 mousePosition = GetMousePosition();
+        Vector2 mouseDelta = GetMouseDelta();
         if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT) || IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-            Vector2 mouseDelta = GetMouseDelta();
             camera._camera.target.x -= mouseDelta.x;
             camera._camera.target.y -= mouseDelta.y;
+
+            mousePosition.x += camera.getCamera().target.x;
+            mousePosition.y += camera.getCamera().target.y;
         }
+        if (CheckCollisionPointRec(mousePosition, client->_caracter->characterRect) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            std::cout << "Clicked on character" << std::endl;
+            inventoryShow = !inventoryShow;
+        }
+
         BeginTextureMode(camera.getScreenCamera());
             ClearBackground(RAYWHITE);
 
             BeginMode2D(camera.getCamera());
                 map.draw();
+
+
                 DrawTextureRec(*client->_caracter->_scarfy, client->_caracter->_frameRec, client->_caracter->_position, WHITE);
+
+
+                //DrawRectangleLinesEx(client->_caracter->characterRect, 3, RED);
+
             EndMode2D();
 
         EndTextureMode();
 
         BeginDrawing();
+
             ClearBackground(BLACK);
             DrawTextureRec(camera.getScreenCamera().texture, ScreenRect, (Vector2){ 0, 0 }, WHITE);
+
+            if (inventoryShow) {
+                Rectangle sourceRec = { 0, 0, (float)client->_caracter->_inventory.width, (float)client->_caracter->_inventory.height };
+                Rectangle destRec = { 10, 1080 - (sourceRec.height * 0.3f) - 10, sourceRec.width * 0.3f, sourceRec.height * 0.3f };
+                Vector2 origin = { 0, 0 };
+                DrawTexturePro(client->_caracter->_inventory, sourceRec, destRec, origin, 0.0f, WHITE);
+            }
+
         EndDrawing();
     }
 
@@ -141,10 +166,12 @@ int main(int argc, char** argv) {
 
 
     UdpClient client(serverAddress, port);
-    client.start();
-    client.gameThread = std::thread(runGameLoop, &client);
-    client.join();
-    client.gameThread.join();
+
+    runGameLoop(&client);
+    // client.start();
+    // client.gameThread = std::thread(runGameLoop, &client);
+    // client.join();
+    // client.gameThread.join();
 
 
     return 0;
