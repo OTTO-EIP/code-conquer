@@ -8,6 +8,7 @@ Raylib::Raylib()
 
     // Init character 1
     _caracter = new Caracter("fox1.png", 12);
+    _interface = new Interface();
 }
 
 Raylib::~Raylib() {}
@@ -49,9 +50,9 @@ void Raylib::testLandingPage()
     // Draw
     BeginDrawing();
         ClearBackground(RAYWHITE);
-
         // Draw character 1
         DrawTextureRec(*_caracter->_scarfy, _caracter->_frameRec, _caracter->_position, WHITE);
+        _interface->drawInterface();
 
     EndDrawing();
 }

@@ -1,1 +1,1 @@
-g++ main.cpp raylib/raylib.cpp -lm -lraylib -o run
+g++ main.cpp raylib.cpp -lm -lraylib -o run

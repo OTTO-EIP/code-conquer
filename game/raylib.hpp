@@ -4,6 +4,7 @@
 #include <string>
 #include <tuple>
 #include "caracter.hpp"
+#include "Interface.hpp"
 #include <cstdlib>
 #include <ctime>
 
