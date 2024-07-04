@@ -84,7 +84,7 @@ void Map::generateFirstLayer(Entity __template__, Entity __template1__, Entity _
 
                 Vector2 pos = {posX, posY};
                 int randomBatiment = distribution1(moteur);
-                std::cout << randomBatiment << std::endl;
+                // std::cout << randomBatiment << std::endl;
                 if (randomBatiment == 1) {
                     __template__.setPosition(pos);
                     _first_layer.push_back(__template__);

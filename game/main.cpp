@@ -3,6 +3,7 @@
 #include "src/Character/Character.hpp"
 #include <filesystem>
 #include <vector>
+#include "Interface.hpp"
 
 #define PLAYER_SIZE 40
 
@@ -20,6 +21,8 @@ int main(int ac, char **av)
     map.generateGround(ground_template, raylib);
     map.generateFirstLayer(building_template, tree_template, multiple_tree_template, raylib);
     Character *_caracter = new Character("fox1.png", 12);
+    Interface *_interface = new Interface(&camera);
+
 
     SetTargetFPS(60);
 
@@ -59,6 +62,7 @@ int main(int ac, char **av)
             
             BeginMode2D(camera.getCamera());
                 map.draw();
+                    _interface->drawAllHouses();
                 DrawTextureRec(*_caracter->_scarfy, _caracter->_frameRec, _caracter->_position, WHITE);
             EndMode2D();
             
@@ -66,8 +70,9 @@ int main(int ac, char **av)
         EndTextureMode();
 
         BeginDrawing();
-            ClearBackground(BLACK);  
+            ClearBackground(BLACK);
             DrawTextureRec(camera.getScreenCamera().texture, ScreenRect, (Vector2){ 0, 0 }, WHITE);
+            _interface->drawInterface();
         EndDrawing();
     }
     
