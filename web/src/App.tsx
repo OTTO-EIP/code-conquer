@@ -7,7 +7,7 @@ import About from './pages/About';
 function App() {
   return (
     <Router>
-      <div className="flex bg-white w-screen h-[900px]">
+      <div className="flex bg-back w-screen h-[900px]">
         <Navbar />
         <div className="flex-1 p-6">
           <Routes>

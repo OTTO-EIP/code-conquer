@@ -102,39 +102,39 @@ const Dashboard: React.FC = () => {
   return (
       <div className="flex flex-col w-full h-full pt-20 space-y-6">
         <div className="flex items-center justify-between w-full h-[90%]">
-          <div className="w-8/12 h-full bg-light-green opacity-100 rounded-lg"></div>
+          <div className="w-8/12 h-full bg-white border-4 border-green opacity-90 rounded-lg"></div>
           {/* Container 1 */}
           <div className="flex flex-col w-4/12 h-full ml-6">
             {/* Container 2 */}
             <div className="w-full h-[10%] rounded-t-lg flex space-x-4">
               <div
-                  className={`w-1/4 h-full rounded-t-lg flex items-center justify-center cursor-pointer ${selectedTab === 'code' ? 'bg-light-green opacity-100' : 'bg-light-green opacity-10'}`}
+                  className={`w-1/4 h-full rounded-t-lg flex items-center justify-center cursor-pointer ${selectedTab === 'code' ? 'bg-green opacity-90' : 'bg-green opacity-10'}`}
                   onClick={() => setSelectedTab('code')}
               >
-                <CodeIcon style={{ width: '3rem', height: '3rem', color: '' }} />
+                <CodeIcon style={{ width: '3rem', height: '3rem', color: 'white' }} />
               </div>
               <div
-                  className={`w-1/4 h-full rounded-t-lg flex items-center justify-center cursor-pointer ${selectedTab === 'character' ? 'bg-light-green opacity-100' : 'bg-light-green opacity-10'}`}
+                  className={`w-1/4 h-full rounded-t-lg flex items-center justify-center cursor-pointer ${selectedTab === 'character' ? 'bg-green opacity-90' : 'bg-green opacity-10'}`}
                   onClick={() => setSelectedTab('character')}
               >
-                <CharacterIcon style={{ width: '3rem', height: '3rem', color: 'black' }} />
+                <CharacterIcon style={{ width: '3rem', height: '3rem', color: 'white' }} />
               </div>
               <div
-                  className={`w-1/4 h-full rounded-t-lg flex items-center justify-center cursor-pointer ${selectedTab === 'script' ? 'bg-light-green opacity-100' : 'bg-light-green opacity-10'}`}
+                  className={`w-1/4 h-full rounded-t-lg flex items-center justify-center cursor-pointer ${selectedTab === 'script' ? 'bg-green opacity-90' : 'bg-green opacity-10'}`}
                   onClick={() => setSelectedTab('script')}
               >
-                <ScriptIcon style={{ width: '3rem', height: '3rem', color: 'black' }} />
+                <ScriptIcon style={{ width: '3rem', height: '3rem', color: 'white' }} />
               </div>
               <div
-                  className={`w-1/4 h-full rounded-t-lg flex items-center justify-center cursor-pointer ${selectedTab === 'local' ? 'bg-light-green opacity-100' : 'bg-light-green opacity-10'}`}
+                  className={`w-1/4 h-full rounded-t-lg flex items-center justify-center cursor-pointer ${selectedTab === 'local' ? 'bg-green opacity-90' : 'bg-green opacity-10'}`}
                   onClick={() => setSelectedTab('local')}
               >
-                <LocalIcon style={{ width: '3rem', height: '3rem', color: 'black' }} />
+                <LocalIcon style={{ width: '3rem', height: '3rem', color: 'white' }} />
               </div>
             </div>
 
             {/* Container 3 */}
-            <div className="w-full h-[90%] bg-light-green opacity-100 rounded-b-lg p-4">
+            <div className="w-full h-[90%] bg-white border-green border-4 border-y-2 opacity-90 rounded-b-lg p-4">
               {renderContent()}
             </div>
           </div>
