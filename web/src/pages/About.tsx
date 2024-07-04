@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import doc from '../assets/doc.png'
+import video1 from '../assets/video1.png';
+import video2 from '../assets/video2.png';
+import video3 from '../assets/video3.png';
+import load from '../assets/loading.png';
 
 interface DocumentationPart {
   id: string;
@@ -146,7 +150,16 @@ const About: React.FC = () => {
 
         )}
       </div>
-      <div className="w-4/12 h-full bg-white rounded-lg"></div>
+      <div className="w-4/12 h-full bg-white rounded-lg">
+        <div className="flex flex-col items-center space-y-4 p-4">
+          <img src={video3} alt="Video 3" className="w-full h-auto rounded-lg" />
+          <img src={video1} alt="Video 1" className="w-full h-auto rounded-lg" />
+          <img src={video2} alt="Video 2" className="w-full h-auto rounded-lg" />
+
+          <img src={load} alt="Video 3" className="w-10 h-10 mt-96 rounded-lg" />
+
+        </div>
+      </div>
     </div>
   );
 };

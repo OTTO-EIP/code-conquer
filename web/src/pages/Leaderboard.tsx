@@ -84,7 +84,7 @@ const Leaderboard: React.FC = () => {
                 </div>
             </div>
             {/* Rest of the leaderboard */}
-            <div className="w-3/4">
+            <div className="w-4/6 h-96 overflow-y-auto">
                 {players.slice(3).map((player) => (
                     <div key={player.id} className="flex items-center space-x-4 py-2 border-b border-green">
                         <div className="w-8 text-white">{player.id}</div>
