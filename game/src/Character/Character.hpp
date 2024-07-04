@@ -12,14 +12,17 @@ class Character {
             _scarfyULeft = LoadTexture("../../assets/Player/fox3.png");
             _scarfyURight = LoadTexture("../../assets/Player/fox2.png");
 
+            _inventory = LoadTexture("../../assets/Inventaire.png");
+
             _direction = 1;
             _scarfy = &_scarfyDRight;
 
             _frameRec = { 0.0f, 0.0f, (float)_scarfy->width / 12, (float)_scarfy->height };
-            _position = { (float)(600 / 2) - (float)(_scarfy->width / frameNumber / 2),
-                          (float)(600 / 2) - (float)(_scarfy->height / 2) };
+            _position = { (float)(1920 / 2) - (float)(_scarfy->width / frameNumber / 2),
+                          (float)(1080 / 2) - (float)(_scarfy->height / 2) };
             _framesSpeed = 18;
 
+            characterRect = { _position.x + (_frameRec.width / 3), _position.y + (_frameRec.height / 4), _frameRec.width / 3, _frameRec.height / 2 };
         };
         ~Character() {};
 
@@ -66,6 +69,12 @@ class Character {
         Texture2D _scarfyDRight;
         Texture2D _scarfyULeft;
         Texture2D _scarfyURight;
+
+        Texture2D _inventory;
+
+
+        Rectangle characterRect;
+
 
 
 

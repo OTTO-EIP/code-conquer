@@ -3,7 +3,7 @@
 Raylib::Raylib()
 {
     _windowName = "Code&Conquer";
-    _windowSize = { 600, 600 };
+    _windowSize = { 1920, 1080 };
     initWindow();
 }
 
