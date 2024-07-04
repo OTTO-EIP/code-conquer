@@ -22,9 +22,9 @@ void loadAllTexture() {
     iconLoaded = true;
     buildMenu = LoadTexture("res/menu_open.png"); // Charger l'icône depuis un fichier
     buildMenuLoaded = true;
-    iconHouse = LoadTexture("assets/map/Tiles/building_door_N.png");
+    iconHouse = LoadTexture("/assets/map/Interface/rem_0014.png");
     iconHouseLoaded = true;
-    planHouse = LoadTexture("assets/map/Tiles/building_door_N.png");
+    planHouse = LoadTexture("/assets/map/Interface/rem_0014.png");
     planHouseLoaded = true;
 }
 
@@ -64,7 +64,7 @@ void placeHouse() {
         auto py = std::to_string(GetMousePosition().y);
         DrawTextureEx(planHouse, {GetMousePosition().x- planHouse.width/5, GetMousePosition().y - planHouse.height/5}, 0, 0.3, WHITE); // Dessiner l'icône à une position donnée
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-            Texture2D new_house = LoadTexture("assets/map/Tiles/building_door_N.png");
+            Texture2D new_house = LoadTexture("/assets/map/Interface/rem_0014.png");
             houses.push_back(new_house);
             Vector2 new_pos;
             new_pos.x = xx;
