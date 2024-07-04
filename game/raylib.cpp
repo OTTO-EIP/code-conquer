@@ -48,10 +48,10 @@ void Raylib::testLandingPage()
 
     // Draw
     BeginDrawing();
-        ClearBackground(RAYWHITE);
+    ClearBackground(RAYWHITE);
 
-        // Draw character 1
-        DrawTextureRec(*_caracter->_scarfy, _caracter->_frameRec, _caracter->_position, WHITE);
+    // Draw character 1
+    DrawTextureRec(*_caracter->_scarfy, _caracter->_frameRec, _caracter->_position, WHITE);
 
     EndDrawing();
 }

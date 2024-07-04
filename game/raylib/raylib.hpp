@@ -11,7 +11,8 @@ class Raylib {
     public:
         Raylib();
         ~Raylib();
-        void testLandingPage();
+        
+        std::tuple<int, int> getWindowSize();
 
     private:
         void initWindow();
