@@ -4,11 +4,12 @@
 class Entity {
 
 public:
-    Entity(std::string path, Vector2 position);
+    Entity(std::string path, Vector2 position, float scale);
     ~Entity();
 
     void draw();
     void setPosition(Vector2 position);
+    float getScale();
 
 private:
     Texture2D _texture;

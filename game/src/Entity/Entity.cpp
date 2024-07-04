@@ -1,10 +1,10 @@
 #include "Entity.hpp"
 
-Entity::Entity(std::string path, Vector2 position)
+Entity::Entity(std::string path, Vector2 position, float scale)
 {
     _texture = LoadTexture(path.c_str());
     _position = position;
-    _scale = 0.5;
+    _scale = scale;
     _rotation = 0.0;
 }
 
@@ -20,4 +20,9 @@ void Entity::draw()
 void Entity::setPosition(Vector2 position)
 {
     _position = position;
+}
+
+float Entity::getScale()
+{
+    return _scale;
 }

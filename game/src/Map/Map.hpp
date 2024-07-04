@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "../Entity/Entity.hpp"
+#include <random>
 
 using namespace std;
 
@@ -18,6 +19,7 @@ class Map {
 
         void addFirstLayer(Entity element);
         void setFirstLayer(vector<Entity> first_layer);
+        void generateFirstLayer(Entity __template__, Entity __template1__, Entity __template2__, Raylib raylib);
 
         void draw();
 

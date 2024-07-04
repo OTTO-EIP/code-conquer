@@ -39,24 +39,73 @@ void Map::addFirstLayer(Entity element)
 void Map::generateGround(Entity __template__, Raylib raylib)
 {
     _grounds.clear();
-    float tileWidth = 55.0f;
-    float tileHeight = 54.0f;
-    float halfTileWidth = tileWidth / 2.0f;
-    float halfTileHeight = tileHeight / 2.0f;
 
-    for (float height = 0; height < std::get<1>(raylib.getWindowSize()); height += tileHeight) {
-        for (float width = 0; width < std::get<0>(raylib.getWindowSize()); width += tileWidth) {
-            float x = width - height;
-            float y = (width + height) / 2.0f;
-            __template__.setPosition({x + halfTileWidth, y - halfTileHeight});
+    int mapWidth = 100;
+    int mapHeight = 100;
+
+    for (int y = 1; y <= mapHeight; y++) {
+        for (int x = 1; x <= mapWidth; x++) {
+
+            float hauteur = 60.0f / 2.0f;
+            float largeur = 115.0f / 2.0f;
+
+            float posX = (y * largeur) - (x * largeur);
+            float posY = (y * hauteur) + (x * hauteur);
+
+            Vector2 pos = {posX, posY};
+            __template__.setPosition(pos);
             _grounds.push_back(__template__);
+        }
+    }
+}
+
+void Map::generateFirstLayer(Entity __template__, Entity __template1__, Entity __template2__, Raylib raylib)
+{
+    std::mt19937 moteur(std::random_device{}());
+    std::uniform_int_distribution<> distribution(1, 100);
+    std::uniform_int_distribution<> distribution1(1, 3);
+
+    _first_layer.clear();
+
+    int mapWidth = 100;
+    int mapHeight = 100;
+
+    int randomPlace;
+
+    for (int y = 0; y < mapHeight; y++) {
+        for (int x = 0; x < mapWidth; x++) {
+            randomPlace = distribution(moteur);
+            if (randomPlace == 3) {
+                float hauteur = 60.0f / 2.0f;
+                float largeur = 115.0f / 2.0f;
+
+                float posX = (y * largeur) - (x * largeur);
+                float posY = (y * hauteur) + (x * hauteur);
+
+                Vector2 pos = {posX, posY};
+                int randomBatiment = distribution1(moteur);
+                std::cout << randomBatiment << std::endl;
+                if (randomBatiment == 1) {
+                    __template__.setPosition(pos);
+                    _first_layer.push_back(__template__);
+                }
+                if (randomBatiment == 2) {
+                    __template1__.setPosition(pos);
+                    _first_layer.push_back(__template1__);
+                }
+                if (randomBatiment == 3) {
+                    __template2__.setPosition(pos);
+                    _first_layer.push_back(__template2__);
+                }
+            }
         }
     }
 }
 
 void Map::draw()
 {
-    for (Entity &elem : _grounds) {
+    for (Entity &elem : _grounds)
         elem.draw();
-    }
+    for (Entity &elem : _first_layer)
+        elem.draw();
 }

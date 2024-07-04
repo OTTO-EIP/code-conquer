@@ -5,6 +5,7 @@
 #include <tuple>
 #include <cstdlib>
 #include <ctime>
+#include <random>
 
 class Raylib {
     public:

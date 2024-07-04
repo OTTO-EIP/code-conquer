@@ -39,20 +39,20 @@ class Character {
         void mouvement() {
             switch (_direction) {
                 case 0: // Move up-right
-                    _position.x += 1;
-                    _position.y -= 1;
+                    _position.x += 0.7;
+                    _position.y -= 0.3;
                     break;
                 case 1: // Move down-right
-                    _position.x += 1;
-                    _position.y += 1;
+                    _position.x += 0.7;
+                    _position.y += 0.3;
                     break;
                 case 2: // Move down-left
-                    _position.x -= 1;
-                    _position.y += 1;
+                    _position.x -= 0.7;
+                    _position.y += 0.3;
                     break;
                 case 3: // Move up-left
-                    _position.x -= 1;
-                    _position.y -= 1;
+                    _position.x -= 0.7;
+                    _position.y -= 0.3;
                     break;
             }
         }
