@@ -20,9 +20,9 @@ int main(int ac, char **av)
     Entity multiple_tree_template("assets/map/Tiles/tree_multiple_E.png", {0, 0}, 0.5);
     map.generateGround(ground_template, raylib);
     map.generateFirstLayer(building_template, tree_template, multiple_tree_template, raylib);
-    Character *_caracter = new Character("fox1.png", 12);
     Interface *_interface = new Interface(&camera);
 
+    Character *_caracter = new Character("assets/Player/fox1.png", 12);
 
     SetTargetFPS(60);
 
