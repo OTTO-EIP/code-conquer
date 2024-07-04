@@ -17,7 +17,7 @@ int main(int ac, char **av)
     Entity ground_template("assets/map/Tiles/grass_center_E.png", {0, 0});
     map.generateGround(ground_template, raylib);
     Character *_caracter = new Character("fox1.png", 12);
-    Interface *_interface = new Interface();
+    Interface *_interface = new Interface(&camera);
 
 
     SetTargetFPS(60);
@@ -58,6 +58,7 @@ int main(int ac, char **av)
             
             BeginMode2D(camera.getCamera());
                 map.draw();
+                    _interface->drawAllHouses();
                 DrawTextureRec(*_caracter->_scarfy, _caracter->_frameRec, _caracter->_position, WHITE);
             EndMode2D();
             
