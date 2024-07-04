@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import doc from '../assets/doc.png'
 
 interface DocumentationPart {
   id: string;
@@ -24,7 +25,7 @@ const documentation: DocumentationPart[] = [
       { id: '2-1', title: 'Village', content: 'Guide de démarrage' },
       { id: '2-2', title: 'Ressources', content: '[Bois] \n [Pierre] \n [Nourriture] \n[Or]' },
       { id: '2-3', title: 'Unités', content: 'Fonctionnement des IA' },
-      { id: '2-3', title: 'Batiments', content: 'Comment gerer les batiment' },
+      { id: '2-4', title: 'Batiments', content: 'Comment gerer les batiment' },
 
     ],
   },
@@ -128,7 +129,21 @@ const About: React.FC = () => {
             )}
           </div>
         ) : (
-          <p>Select a part from the list</p>
+          <div className='p-5'>
+            <p className="text-4xl font-semibold">Documentation Code & Conquer</p>
+            <p className="text-l mt-5 italic">Bienvenue dans Code & Conquer, un jeu innovant qui fusionne stratégie en temps réel et intelligence artificielle pour offrir une expérience de jeu unique et captivante. Dans ce monde dynamique, vous incarnez le chef d'un village en plein essor, où votre mission est de guider vos villageois dans leur développement à travers une vaste carte interactive.</p>
+            <p className="text-l mt-5 italic">Votre aventure commence modestement, avec une poignée de villageois et quelques ressources de base. Cependant, la clé de votre succès réside dans l'utilisation de scripts basés sur l'intelligence artificielle par renforcement. En assignant ces scripts à vos villageois, vous les aidez à apprendre, à s'adapter et à optimiser leurs tâches quotidiennes. Que ce soit la collecte de ressources, la construction de structures, ou la défense contre des menaces, chaque décision que vous prenez et chaque script que vous développez influenceront directement l'évolution de votre village.</p>
+            <p className="text-l"></p>
+            <p className="text-l"></p>
+            <p className="text-l"></p>
+            <p className="text-l"></p>
+            <p className="text-l"></p>
+            <p className="text-l"></p>
+
+            <img src={doc} alt="Silver Cup" className="w-32 h-32 ml-56 mt-20" />
+
+          </div>
+
         )}
       </div>
       <div className="w-4/12 h-full bg-white rounded-lg"></div>

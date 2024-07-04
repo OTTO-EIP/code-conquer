@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import fox from '../assets/fox.svg';
+import fox2 from '../assets/fox2.png';
 import { IconButton, Tooltip, Dialog, DialogContent, DialogActions, Button, Grid, Typography } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import InfoIcon from '@mui/icons-material/Info';
@@ -11,12 +12,13 @@ interface Character {
     status: string;
     health: number;
     attack: number;
+    src: string;
 }
 
 const characters: Character[] = [
-    { name: 'Yumi', status: 'In Base', health: 100, attack: 20 },
-    { name: 'Laure', status: 'Wood cutting', health: 90, attack: 25 },
-    { name: 'Pablo', status: 'Mining', health: 80, attack: 30 },
+    { name: 'Yumi', status: 'In Base', health: 100, attack: 20, src: fox },
+    { name: 'Laure', status: 'Wood cutting', health: 90, attack: 25, src: fox },
+    { name: 'Pablo', status: 'Mining', health: 80, attack: 30, src: fox },
 ];
 
 const CharacterDisplay: React.FC = () => {
@@ -38,7 +40,7 @@ const CharacterDisplay: React.FC = () => {
             <ul className="flex flex-col items-center space-y-4">
                 {characters.map((character) => (
                     <li key={character.name} className="flex w-full rounded-lg items-center bg-light-grey p-2 shadow-md border border-green">
-                        <img src={fox} alt="character" className="w-10 h-10" />
+                        <img src={character.src} className="w-10 h-10" />
                         <div className="flex text-sm font-semibold h-full w-full justify-between items-center ml-4">
                             <span>{character.name}</span>
                             <div className="flex items-center ml-2">
