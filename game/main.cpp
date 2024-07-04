@@ -1,5 +1,6 @@
 #include "src/Map/Map.hpp"
 #include "src/RayCam/RayCam.hpp"
+#include "src/Character/Character.hpp"
 #include <filesystem>
 #include <vector>
 
@@ -14,10 +15,36 @@ int main(int ac, char **av)
     Map map;
     Entity ground_template("assets/map/Tiles/grass_center_E.png", {0, 0});
     map.generateGround(ground_template, raylib);
+    Character *_caracter = new Character("fox1.png", 12);
 
     SetTargetFPS(60);
 
     while (!WindowShouldClose()) {
+
+    float deltaTime = GetFrameTime();
+    _caracter->_elapsedTime += deltaTime;
+
+    if (_caracter->_elapsedTime >= _caracter->_changeDirectionTime) {
+        _caracter->_elapsedTime = 0.0f;
+        _caracter->_direction = std::rand() % 4;
+        switch (_caracter->_direction) {
+            case 0:
+                _caracter->_scarfy = &_caracter->_scarfyURight;
+                break;
+            case 1:
+                _caracter->_scarfy = &_caracter->_scarfyDRight;
+                break;
+            case 2:
+                _caracter->_scarfy = &_caracter->_scarfyDLeft;
+                break;
+            case 3:
+                _caracter->_scarfy = &_caracter->_scarfyULeft;
+                break;
+        }
+    }
+    _caracter->updateAnimation(18, 12, _caracter->_direction);
+    _caracter->mouvement();
+
         if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT) || IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
             Vector2 mouseDelta = GetMouseDelta();
             camera._camera.target.x -= mouseDelta.x;
@@ -28,6 +55,7 @@ int main(int ac, char **av)
             
             BeginMode2D(camera.getCamera());
                 map.draw();
+                DrawTextureRec(*_caracter->_scarfy, _caracter->_frameRec, _caracter->_position, WHITE);
             EndMode2D();
             
             
@@ -38,7 +66,8 @@ int main(int ac, char **av)
             DrawTextureRec(camera.getScreenCamera().texture, ScreenRect, (Vector2){ 0, 0 }, WHITE);
         EndDrawing();
     }
-
+    
     CloseWindow();
+    delete _caracter;
     return 0;
 }

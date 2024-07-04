@@ -1,11 +1,12 @@
 #pragma once
+#include "../../raylib/raylib.hpp"
 
 #define MAX_FRAME_SPEED     15
 #define MIN_FRAME_SPEED      1
 
-class Caracter {
+class Character {
     public:
-        Caracter(std::string texturePath, int frameNumber) {
+        Character(std::string texturePath, int frameNumber) {
             _scarfyDLeft = LoadTexture("res/fox4.png");
             _scarfyDRight = LoadTexture("res/fox1.png");
             _scarfyULeft = LoadTexture("res/fox3.png");
@@ -20,7 +21,7 @@ class Caracter {
             _framesSpeed = 18;
 
         };
-        ~Caracter() {};
+        ~Character() {};
 
         void updateAnimation(int speed, int frameNumber, int direction) {
             _direction =  direction;
