@@ -95,7 +95,13 @@ void runGameLoop(UdpClient *client) {
     RayCam camera(raylib.getWindowSize(), scene);
     Rectangle ScreenRect = { 0.0f, 0.0f, (float)camera.getScreenCamera().texture.width, (float)-camera.getScreenCamera().texture.height };
     Map map;
-    Entity ground_template("../../assets/map/Tiles/grass_center_E.png", {0, 0});
+    Entity ground_template("../../assets/map/Tiles/grass_center_E.png", {0, 0}, 0.5);
+    Entity building_template("../../assets/map/Tiles/building_door_N.png", {0, 0}, 0.5);
+    Entity tree_template("../../assets/map/Tiles/tree_single_E.png", {0, 0}, 0.5);
+    Entity multiple_tree_template("../../assets/map/Tiles/tree_multiple_E.png", {0, 0}, 0.5);
+    map.generateGround(ground_template, raylib);
+    map.generateFirstLayer(building_template, tree_template, multiple_tree_template, raylib);
+    Interface *_interface = new Interface(&camera);
     client->_caracter = new Character("../../assets/Player/fox1.png", 12);
     map.generateGround(ground_template, raylib);
 
@@ -125,8 +131,7 @@ void runGameLoop(UdpClient *client) {
 
             BeginMode2D(camera.getCamera());
                 map.draw();
-
-
+                _interface->drawAllHouses();
                 DrawTextureRec(*client->_caracter->_scarfy, client->_caracter->_frameRec, client->_caracter->_position, WHITE);
 
 
@@ -147,7 +152,7 @@ void runGameLoop(UdpClient *client) {
                 Vector2 origin = { 0, 0 };
                 DrawTexturePro(client->_caracter->_inventory, sourceRec, destRec, origin, 0.0f, WHITE);
             }
-
+            _interface->drawInterface();
         EndDrawing();
     }
 

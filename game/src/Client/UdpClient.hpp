@@ -14,6 +14,7 @@
 #include "../Map/Map.hpp"
 #include "../RayCam/RayCam.hpp"
 #include "../Character/Character.hpp"
+#include "../Interface/Interface.hpp"
 
 #define BUFFER_SIZE 1024
 
