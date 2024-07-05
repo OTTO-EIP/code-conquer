@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import fox from '../assets/fox.svg';
-import fox2 from '../assets/fox2.png';
 import { IconButton, Tooltip, Dialog, DialogContent, DialogActions, Button, Grid, Typography } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import InfoIcon from '@mui/icons-material/Info';
