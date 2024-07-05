@@ -12,8 +12,6 @@ services:
     build:
       context: ./web/
       dockerfile: Dockerfile
-    # volumes:
-    #   - game-index-html-volume:/app/index-html  # Mount the volume containing the index.html file
     ports:
       - "5173:5173"  # Port for the React development server
     command: ["npm", "run", "dev"]  # Run the development server
