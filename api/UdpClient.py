@@ -38,15 +38,3 @@ class UdpClient:
         receive_thread.join()
         self.sock.close()
 
-    
-
-def main():
-    server_address = "127.0.0.1"
-    port = 8000
-
-    client = UdpClient(server_address, port)
-    client.script = ["0", "1", "2", "3"]
-    client.start()
-
-if __name__ == "__main__":
-    main()

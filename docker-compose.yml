@@ -1,13 +1,37 @@
 services:
-  game:
-    build:
-      dockerfile: Dockerfile
-      context: ./game/
-    # command: ["emrun", "--no_browser", "--port", "8080", "."]
-    ports:
-      - "8080:8080"
-
-  # web:
+  # game:
   #   build:
+  #     context: ./game
   #     dockerfile: Dockerfile
-  #     context: ./web/
+  #   volumes:
+  #     - game-index-html-volume:/app/index-html  # Share the index.html file for the web service
+  #   ports:
+  #     - "8080:8080"  # Port for the game service
+
+  web:
+    build:
+      context: ./web/
+      dockerfile: Dockerfile
+    # volumes:
+    #   - game-index-html-volume:/app/index-html  # Mount the volume containing the index.html file
+    ports:
+      - "5173:5173"  # Port for the React development server
+    command: ["npm", "run", "dev"]  # Run the development server
+
+  server:
+    build:
+      context: ./game/src/Server
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"  # Port for the server service
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"  # Port for the API service
+
+# volumes:
+#   game-web-volume:
+#   game-index-html-volume:

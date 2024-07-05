@@ -4,7 +4,7 @@ const GameDisplay: React.FC = () => {
   const [htmlContent, setHtmlContent] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('/custom_template.html')
+    fetch('/index.html')
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
