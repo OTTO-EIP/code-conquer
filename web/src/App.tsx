@@ -8,7 +8,7 @@ import Leaderboard from "./pages/Leaderboard.tsx";
 function App() {
   return (
     <Router>
-      <div className="flex bg-back w-screen h-[900px]">
+      <div className="flex flex-col bg-back w-screen h-[900px]">
         <Navbar />
         <div className="flex-1 px-6">
           <Routes>

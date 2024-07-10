@@ -15,9 +15,9 @@ export default {
         'left-sm': '2px 0 5px -3px rgba(0, 0, 0, 0.1), 2px 0 3px -2px rgba(0, 0, 0, 0.05)',
       },
       colors: {
-        'green': '#27c906',
+        'green': '#1466B8',
         'light-grey': 'rgba(0,0,0,0.1)',
-        'back': '#132D46',
+        'back': '#1A2633',
         'customBronze': '#E4624C',
         'customGold': '#FDDB8D',
         'green-opacity-40': 'rgba(0, 128, 0, 0.05)',

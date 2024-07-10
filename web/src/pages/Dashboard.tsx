@@ -14,6 +14,23 @@ const Dashboard: React.FC = () => {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
+  const initEditor = () => {
+    if (containerRef.current) {
+      const editorInstance = monaco.editor.create(containerRef.current, {
+        value: editorContent,
+        theme: 'vs',
+        minimap: { enabled: false },
+        language: 'javascript',
+      });
+
+      editorInstance.onDidChangeModelContent(() => {
+        setEditorContent(editorInstance.getValue());
+      });
+
+      editorRef.current = editorInstance;
+    }
+  };
+
   const renderContent = () => {
     switch (selectedTab) {
       case 'code':
@@ -32,27 +49,14 @@ const Dashboard: React.FC = () => {
   useEffect(() => {
     const loaderUrl = 'https://cdn.jsdelivr.net/npm/monaco-editor@latest/min/vs/loader.js';
 
-    const initEditor = () => {
-      if (containerRef.current && !editorRef.current) {
-        const editorInstance = monaco.editor.create(containerRef.current, {
-          value: editorContent,
-          theme: 'vs',
-          minimap: { enabled: false },
-          language: 'javascript',
-        });
-
-        editorInstance.onDidChangeModelContent(() => {
-          setEditorContent(editorInstance.getValue());
-        });
-
-        editorRef.current = editorInstance;
-      }
-    };
-
     const loaderScript = document.createElement('script');
     loaderScript.src = loaderUrl;
     loaderScript.async = true;
-    loaderScript.onload = initEditor;
+    loaderScript.onload = () => {
+      if (selectedTab === 'code') {
+        initEditor();
+      }
+    };
     document.body.appendChild(loaderScript);
 
     return () => {
@@ -65,8 +69,14 @@ const Dashboard: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedTab === 'code' && editorRef.current) {
-      editorRef.current.layout();
+    if (selectedTab === 'code') {
+      if (editorRef.current) {
+        editorRef.current.dispose();
+        editorRef.current = null;
+      }
+      setTimeout(() => {
+        initEditor();
+      }, 0);
     }
   }, [selectedTab]);
 
@@ -82,25 +92,25 @@ const Dashboard: React.FC = () => {
                   className={`w-1/4 h-full rounded-t-lg flex items-center justify-center cursor-pointer ${selectedTab === 'code' ? 'bg-green opacity-90' : 'bg-green opacity-10'}`}
                   onClick={() => setSelectedTab('code')}
               >
-                <CodeIcon style={{ width: '3rem', height: '3rem', color: 'white' }} />
+                <CodeIcon style={{ width: '2rem', height: '2rem', color: 'white' }} />
               </div>
               <div
                   className={`w-1/4 h-full rounded-t-lg flex items-center justify-center cursor-pointer ${selectedTab === 'character' ? 'bg-green opacity-90' : 'bg-green opacity-10'}`}
                   onClick={() => setSelectedTab('character')}
               >
-                <CharacterIcon style={{ width: '3rem', height: '3rem', color: 'white' }} />
+                <CharacterIcon style={{ width: '2rem', height: '2rem', color: 'white' }} />
               </div>
               <div
                   className={`w-1/4 h-full rounded-t-lg flex items-center justify-center cursor-pointer ${selectedTab === 'script' ? 'bg-green opacity-90' : 'bg-green opacity-10'}`}
                   onClick={() => setSelectedTab('script')}
               >
-                <ScriptIcon style={{ width: '3rem', height: '3rem', color: 'white' }} />
+                <ScriptIcon style={{ width: '2rem', height: '2rem', color: 'white' }} />
               </div>
               <div
                   className={`w-1/4 h-full rounded-t-lg flex items-center justify-center cursor-pointer ${selectedTab === 'local' ? 'bg-green opacity-90' : 'bg-green opacity-10'}`}
                   onClick={() => setSelectedTab('local')}
               >
-                <LocalIcon style={{ width: '3rem', height: '3rem', color: 'white' }} />
+                <LocalIcon style={{ width: '2rem', height: '2rem', color: 'white' }} />
               </div>
             </div>
             <div className="w-full h-[90%] bg-white border-green border-4 border-y-2 opacity-90 rounded-b-lg p-4">

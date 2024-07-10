@@ -45,12 +45,12 @@ const CharacterDisplay: React.FC = () => {
                             <div className="flex items-center ml-2">
                                 <Tooltip title="Add Script">
                                     <IconButton size="medium" className="ml-2">
-                                        <AddCircleOutlineIcon fontSize="small" style={{ color: '#27c906' }}/>
+                                        <AddCircleOutlineIcon fontSize="small" style={{ color: '#1466B8' }}/>
                                     </IconButton>
                                 </Tooltip>
                                 <Tooltip title={`Status: ${character.status}`}>
                                     <IconButton size="medium" className="ml-2" onClick={() => handleClickOpen(character)}>
-                                        <InfoIcon fontSize="small" style={{ color: '#27c906' }}/>
+                                        <InfoIcon fontSize="small" style={{ color: '#1466B8' }}/>
                                     </IconButton>
                                 </Tooltip>
                             </div>
